@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблиця множення</title>
+</head>
+<body>
+    <h1>Таблиця множення</h1>
+    <p>Загальний рахунок: <span id="score">0</span></p>
+    <button id="nextTaskButton">Наступне завдання</button>
+    <p id="task"></p>
+    <label for="answer">Введіть відповідь: </label>
+    <input type="number" id="answer" min="0">
+    <button id="checkButton">Перевірити</button>
+    <p id="result"></p>
+    <script>
+        let score = 0;
+        let currentTask = generateTask();
+        
+        const scoreDisplay = document.getElementById("score");
+        const taskDisplay = document.getElementById("task");
+        const answerInput = document.getElementById("answer");
+        const resultDisplay = document.getElementById("result");
+        const nextTaskButton = document.getElementById("nextTaskButton");
+        const checkButton = document.getElementById("checkButton");
+        
+        function generateTask() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            return { num1, num2 };
+        }
+        
+        function displayTask(task) {
+            taskDisplay.textContent = `Скільки буде ${task.num1} x ${task.num2}?`;
+        }
+        
+        function checkAnswer(task, answer) {
+            return task.num1 * task.num2 === parseInt(answer, 10);
+        }
+        
+        nextTaskButton.addEventListener("click", () => {
+            currentTask = generateTask();
+            displayTask(currentTask);
+            answerInput.value = "";
+            resultDisplay.textContent = "";
+            nextTaskButton.disabled = true;
+            checkButton.disabled = false;
+        });
+        
+        checkButton.addEventListener("click", () => {
+            const userAnswer = answerInput.value;
+            if (checkAnswer(currentTask, userAnswer)) {
+                score++;
+                resultDisplay.textContent = "Правильно!";
+            } else {
+                resultDisplay.textContent = "Неправильно. Спробуйте ще раз.";
+            }
+            scoreDisplay.textContent = score;
+            nextTaskButton.disabled = false;
+            checkButton.disabled = true;
+        });
+        
+        displayTask(currentTask);
+    </script>
+</body>
+</html>

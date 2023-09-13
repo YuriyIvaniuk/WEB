@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблиця множення</title>
+</head>
+<body>
+    <h1>Перевірка знань таблиці множення</h1>
+    <div id="question-container">
+        <p id="question"></p>
+    </div>
+    <div id="options-container">
+        <input type="radio" name="answer" id="option1"> <label for="option1" id="label1"></label><br>
+        <input type="radio" name="answer" id="option2"> <label for="option2" id="label2"></label><br>
+        <input type="radio" name="answer" id="option3"> <label for="option3" id="label3"></label><br>
+        <input type="radio" name="answer" id="option4"> <label for="option4" id="label4"></label><br>
+    </div>
+    <p id="score">Загальний рахунок: 0</p>
+    <p id="result"></p>
+    <script>
+        var num1, num2;
+        var totalScore = 0;
+        function generateQuestion() {
+            var radioButtons = document.querySelectorAll('input[name="answer"]');
+            for (var i = 0; i < radioButtons.length; i++) {
+                radioButtons[i].checked = false;
+            }
+            num1 = Math.floor(Math.random() * 10) + 1;
+            num2 = Math.floor(Math.random() * 10) + 1;
+            var correctAnswer = num1 * num2;
+            document.getElementById("question").textContent = num1 + " x " + num2 + " = ?";
+            var wrongAnswers = [];
+            while (wrongAnswers.length < 3) {
+                var wrongAnswer = Math.floor(Math.random() * 100) + 1;
+                if (wrongAnswer !== correctAnswer && wrongAnswers.indexOf(wrongAnswer) === -1) {
+                    wrongAnswers.push(wrongAnswer);
+                }
+            }
+            var answerOptions = [correctAnswer, ...wrongAnswers];
+            shuffleArray(answerOptions);
+            for (var i = 0; i < 4; i++) {
+                document.getElementById("label" + (i + 1)).textContent = answerOptions[i];
+                document.getElementById("option" + (i + 1)).value = answerOptions[i];
+            }
+        }
+        function checkAnswer() {
+            var selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (selectedAnswer) {
+                var userAnswer = parseInt(selectedAnswer.value, 10);
+                var correctAnswer = num1 * num2;
+                var result = document.getElementById("result");
+                if (userAnswer === correctAnswer) {
+                    result.textContent = "Правильно!";
+                    totalScore++;
+                } else {
+                    result.textContent = "Неправильно. Правильна відповідь: " + correctAnswer;
+                }
+                document.getElementById("score").textContent = "Загальний рахунок: " + totalScore;
+                generateQuestion();
+            }
+        }
+        var radioButtons = document.querySelectorAll('input[name="answer"]');
+        for (var i = 0; i < radioButtons.length; i++) {
+            radioButtons[i].addEventListener('click', checkAnswer);
+        }
+        function shuffleArray(array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        generateQuestion();
+    </script>
+</body>
+</html>

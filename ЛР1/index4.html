@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.table td:first-child {
+    width: 20%;
+}
+
+.table td:nth-child(2) {
+    width: 60%;
+}
+
+.table td:last-child {
+    width: 20%;
+}
+
+.gallery {
+    text-align: center;
+}
+
+.btn{
+    color: rgb(129, 129, 243);
+    text-decoration: underline;
+}
+</style>
+<body>
+    <div class="gallery">
+        <table class="table">
+            <tr>
+                <td rowspan="3" id="previous" class="btn">Назад</td>
+                <td id="title">title</td>
+                <td rowspan="3" id="next" class="btn">Вперед</td>
+            </tr>
+            <tr>
+                <td id="path" class="image"><img id="image" src="" width="400" height="400"></td>
+            </tr>
+            <tr>
+                <td id="description">description</td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    let imagesArray = [ 
+        {
+            path: 'styles/1.jpg',
+            title : 'костюм',
+            description : 'білий довгий'
+        },
+        {
+            path: 'styles/2.jpg',
+            title : 'костюм',
+            description : 'короткий зелений'
+        },
+        {
+            path: 'styles/3.jpg',
+            title : 'пальто',
+            description : 'довге синього кольору'
+        }
+    ];
+
+    let currentIndex = 0;
+
+    function show() {
+        document.getElementById("image").src = imagesArray[currentIndex].path;
+        document.getElementById("title").innerHTML = imagesArray[currentIndex].title;
+        document.getElementById("description").innerHTML = imagesArray[currentIndex].description;
+        if (currentIndex == 0){
+            document.getElementById("previous").innerHTML = ""
+        }
+        else{
+            document.getElementById("previous").innerHTML = 'Назад'
+        }
+        if (currentIndex == 2){
+            document.getElementById("next").innerHTML = ""
+        }
+        else{
+            document.getElementById("next").innerHTML = 'Вперед'
+        };
+    };    
+    show();
+
+    document.getElementById("previous").addEventListener("click", function() {
+        currentIndex = (currentIndex - 1) % imagesArray.length;
+        show();
+    });
+    
+    document.getElementById("next").addEventListener("click", function() {
+        currentIndex = (currentIndex + 1) % imagesArray.length;
+        show();
+    });
+});
+    </script>
+</body>
+</html>

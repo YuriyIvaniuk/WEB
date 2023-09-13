@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Digits CAPTCHA</title>
+    <style>
+        .captcha-digit {
+            display: flex;
+        }
+        .pixel {
+            width: 20px;
+            height: 20px;
+            margin: 1px;
+            background-color: white;
+        }
+        
+        .black {
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Введіть число, яке ви бачите на пікселях</h1>
+    <div class="captcha-digit"></div>
+    <br>
+    <input type="text" id="user-input">
+    <button onclick="checkCaptcha(valueOfCaptcha)">Перевірити</button>
+    <p id="result"></p>
+    <script>
+        var pixelDigits = [
+            [
+                "### ",
+                "# #",
+                "# #",
+                "# #",
+                "###"
+            ],
+            [
+                " # ",
+                " # ",
+                " # ",
+                " # ",
+                " # "
+            ],
+            [
+                "### ",
+                "  #",
+                "###",
+                "#  ",
+                "###"
+            ],
+            [
+                "### ",
+                "  #",
+                "###",
+                "  #",
+                "###"
+            ],
+            [
+                "# # ",
+                "# #",
+                "###",
+                "  #",
+                "  #"
+            ],
+            [
+                "### ",
+                "#  ",
+                "###",
+                "  #",
+                "###"
+            ],
+            [
+                "### ",
+                "#  ",
+                "###",
+                "# #",
+                "###"
+            ],
+            [
+                "### ",
+                "  #",
+                "  #",
+                "  #",
+                "  #"
+            ],
+            [
+                "### ",
+                "# #",
+                "###",
+                "# #",
+                "###"
+            ],
+            [
+                "### ",
+                "# #",
+                "###",
+                "  #",
+                "###"
+            ]
+        ];
+        var digitArray = [];
+        var valueOfCaptcha = 0;
+        var amount = 4;
+        var resultElement = document.getElementById("result");
+
+        function renderCaptcha() {
+            for (var i = 0; i < amount; i++) {
+                var digit = Math.floor(Math.random() * (10 - 0 + 0)) + 0;
+                var pixelContainer = document.querySelector(".captcha-digit");
+
+                digitArray.push(digit);
+
+                var pixelArray = pixelDigits[digit];
+                for (var j = 0; j < pixelArray[0].length; j++) {
+                    var row = document.createElement("div");
+                    row.className = "row";
+                    for (var k = 0; k < pixelArray.length; k++) {
+                        var pixel = document.createElement("div");
+                        pixel.className = "pixel";
+                        if (pixelArray[k][j] === "#") {
+                            pixel.classList.add("black");
+                        }
+                        row.appendChild(pixel);
+                    }
+                    pixelContainer.appendChild(row);
+                }
+            }
+            var numberString = digitArray.join("");
+            valueOfCaptcha = parseInt(numberString, 10);
+            /*resultElement.textContent = "Результат = " + numberString;*/
+        }
+
+        function checkCaptcha() {
+            var userInput = document.getElementById("user-input").value;
+            if (userInput === "") {
+                resultElement.textContent = "Введіть число перед перевіркою.";
+            } else {
+                var digit = parseInt(userInput, 10);
+                if (!isNaN(digit) && digit >= 0 && digit <= 9999) {
+                    if (digit === valueOfCaptcha) {
+                        resultElement.textContent = "Правильно";
+                    } else {
+                        resultElement.textContent = "Неправильно. Введіть правильне число.";
+                    }
+                } else {
+                    resultElement.textContent = "Введіть правильне число від 0 до 9999.";
+                }
+            }
+        }
+
+        renderCaptcha();
+    </script>
+</body>
+</html>
